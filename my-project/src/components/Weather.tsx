@@ -1,3 +1,18 @@
+/**
+ * @file Weather.tsx
+ * @description This component displays detailed weather information for a specified location, 
+ *              including the current temperature, "feels like" value, wind speed, precipitation, 
+ *              humidity, and a forecast for upcoming days. The design is responsive and styled 
+ *              using Tailwind CSS.
+ * 
+ * @component
+ * @returns {TSX.Element} A weather dashboard with detailed current and forecast information.
+ * 
+ * @author elprofesorsunny
+ * @version 1.0.0
+ * @date 2025-01-07
+ */
+
 function Weather() {
   return (
 

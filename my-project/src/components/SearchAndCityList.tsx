@@ -1,3 +1,17 @@
+/**
+ * @file SearchAndCityList.tsx
+ * @description This component provides a search bar to look up cities and displays a list of cities 
+ *              along with their weather details, including temperature, weather condition, and icons. 
+ *              It utilizes Tailwind CSS for styling and supports responsive design.
+ * 
+ * @component
+ * @returns {JSX.Element} A responsive search bar and city weather list UI.
+ * 
+ * @author elprofesorsunny
+ * @version 1.0.0
+ * @date 2025-01-07
+ */
+
 function SearchAndCityList() {
   return (
     <main className="flex flex-col bg-[#e9ecef] shadow-lg absolute right-0 bottom-10 top-28 p-5 text-black rounded-tl-2xl rounded-bl-2xl gap-8">
