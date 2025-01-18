@@ -1,30 +1,34 @@
-interface City {
-    name: string;
-    temperature: number;
-    icon: string;
-}
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { setWeatherData } from '../redux/WeatherSlice';
 
 interface CityListProps {
-    cities: City[];
+    searchResults: any[];
+    loading: boolean;
+    error: string | null;
 }
 
-function CityList({ cities }: CityListProps) {
+const CityList: React.FC<CityListProps> = ({ searchResults, loading, error }) => {
+    const dispatch = useDispatch();
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div className="text-red-500">{error}</div>;
+
     return (
-        <div className="flex flex-col gap-5">
-            {cities.map((city, index) => (
-                <div key={index} className="flex bg-gradient-to-r from-[#dee2e6] from-50% to-50% to-[#f8f9fa] rounded-2xl shadow-xl w-[300px] h-[100px]">
-                    <div className="flex bg-[#f8f9fa] p-4 rounded-2xl items-center text-2xl font-semibold">
-                        {city.temperature}°C
-                    </div>
-                    <div className="flex bg-[#dee2e6] p-4 items-center text-2xl font-semibold rounded-tr-2xl rounded-br-2xl">
-                        {city.name}
-                    </div>
-                    <img src={city.icon} className="flex content-center fill-black bg-[#f8f9fa] flex-grow rounded-tr-2xl rounded-br-2xl justify-center items-center" alt="weather-icon" />
+        <div className="flex flex-col gap-3">
+            {searchResults.map((result) => (
+                <div
+                    key={result.id}
+                    className="bg-white p-4 rounded-lg shadow-md cursor-pointer"
+                    onClick={() => dispatch(setWeatherData(result))}
+                >
+                    <h3 className="text-lg font-semibold">{result.name}</h3>
+                    <p className="text-sm">Country: {result.sys.country}</p>
+                    <p className="text-sm">Temperature: {result.main.temp}°C</p>
                 </div>
             ))}
         </div>
     );
-
-}
+};
 
 export default CityList;
