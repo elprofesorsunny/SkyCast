@@ -1,10 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import WeatherAPI from '../services/WeatherAPI';
 import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 
-function SearchAndCityList() {
+interface SearchAndCityListProps {
+    setWeatherData: (data: any) => void;
+}
+
+const SearchAndCityList: React.FC<SearchAndCityListProps> = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
