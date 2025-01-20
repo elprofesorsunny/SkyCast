@@ -14,7 +14,7 @@ function App() {
         <div className="bg-[#f8f9fa] w-screen h-screen">
             <Header />
             <Weather weatherData={weatherData} />
-            <SearchAndCityList setWeatherData={(data) => dispatch(setWeatherData(data))} />
+            <SearchAndCityList setWeatherData={(data: any) => dispatch(setWeatherData(data))} />
         </div>
     );
 }
