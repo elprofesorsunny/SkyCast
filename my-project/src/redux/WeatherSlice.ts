@@ -5,7 +5,7 @@ interface WeatherState {
 }
 
 const initialState: WeatherState = {
-    weatherData: null,
+    weatherData: JSON.parse(localStorage.getItem("weatherData") || "null"),
 };
 
 const weatherSlice = createSlice({
@@ -14,6 +14,7 @@ const weatherSlice = createSlice({
     reducers: {
         setWeatherData: (state, action: PayloadAction<any>) => {
             state.weatherData = action.payload;
+            localStorage.setItem("weatherData", JSON.stringify(action.payload));
         },
     },
 });

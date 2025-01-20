@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import WeatherAPI from '../services/WeatherAPI';
 import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 
-interface SearchAndCityListProps {
-    setWeatherData: (data: any) => void;
-}
-
-const SearchAndCityList: React.FC<SearchAndCityListProps> = () => {
+const SearchAndCityList: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const dispatch = useDispatch();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const debounce = (func: (...args: any[]) => void, delay: number) => {
         let timeoutId: ReturnType<typeof setTimeout>;
@@ -42,10 +40,20 @@ const SearchAndCityList: React.FC<SearchAndCityListProps> = () => {
     const debouncedFetchSearchResults = useCallback(debounce(fetchSearchResults, 500), []);
 
     useEffect(() => {
+        const initialSearchTerm = searchParams.get('query');
+        if (initialSearchTerm) {
+            setSearchTerm(initialSearchTerm);
+            fetchSearchResults(initialSearchTerm);
+        }
+    }, [searchParams]);
+
+    useEffect(() => {
         if (searchTerm.trim()) {
             debouncedFetchSearchResults(searchTerm);
+            setSearchParams({ query: searchTerm });
         } else {
             setSearchResults([]);
+            setSearchParams({});
         }
     }, [searchTerm]);
 
@@ -62,6 +70,6 @@ const SearchAndCityList: React.FC<SearchAndCityListProps> = () => {
             <SearchResults searchResults={searchResults} dispatch={dispatch} />
         </main>
     );
-}
+};
 
 export default SearchAndCityList;

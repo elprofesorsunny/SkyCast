@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { setWeatherData } from '../redux/WeatherSlice';
-import WeatherAPI from '../services/WeatherAPI';
-import { RootState } from '../redux/Store';
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setWeatherData } from "../redux/WeatherSlice";
+import WeatherAPI from "../services/WeatherAPI";
+import { RootState } from "../redux/Store";
 
 function WeatherCurrent() {
     const weatherData = useSelector((state: RootState) => state.weather.weatherData);
@@ -12,7 +12,7 @@ function WeatherCurrent() {
         if (!weatherData) {
             const fetchDefaultCityWeather = async () => {
                 try {
-                    const defaultCity = 'London';
+                    const defaultCity = "London";
                     const data = await WeatherAPI.searchCity(defaultCity);
                     if (data.length > 0) {
                         dispatch(setWeatherData(data[0]));
