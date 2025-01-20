@@ -1,19 +1,30 @@
-interface WeatherProps {
-    weatherData?: {
-        name: string;
-        main: {
-            temp: number;
-            feels_like: number;
-            temp_max: number;
-            temp_min: number;
-        };
-        weather: {
-            icon: string;
-        }[];
-    } | null;
-}
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setWeatherData } from '../redux/WeatherSlice';
+import WeatherAPI from '../services/WeatherAPI';
+import { RootState } from '../redux/Store';
 
-function WeatherCurrent({weatherData}: WeatherProps) {
+function WeatherCurrent() {
+    const weatherData = useSelector((state: RootState) => state.weather.weatherData);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!weatherData) {
+            const fetchDefaultCityWeather = async () => {
+                try {
+                    const defaultCity = 'London';
+                    const data = await WeatherAPI.searchCity(defaultCity);
+                    if (data.length > 0) {
+                        dispatch(setWeatherData(data[0]));
+                    }
+                } catch (error) {
+                    console.error("Error fetching weather data: ", error);
+                }
+            };
+            fetchDefaultCityWeather();
+        }
+    }, [weatherData, dispatch]);
+
     if (!weatherData) {
         return <div>Loading...</div>;
     }
