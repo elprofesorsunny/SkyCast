@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
-import SearchForm from './SearchForm';
-import CityList from './CityList';
+import { useDispatch } from 'react-redux';
+import { setWeatherData } from '../redux/WeatherSlice';
+import WeatherAPI from '../services/WeatherAPI';
 
 function SearchAndCityList() {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [searchResults, setSearchResults] = useState<any[]>([]);
+    const dispatch = useDispatch();
 
     const debounce = (func: (...args: any[]) => void, delay: number) => {
         let timeoutId: ReturnType<typeof setTimeout>;
@@ -23,14 +24,11 @@ function SearchAndCityList() {
         setLoading(true);
         setError(null);
 
-        const apiKey = 'ef827831237dbae7257b7b7499242373';
-        const url = `https://api.openweathermap.org/data/2.5/find?q=${query}&appid=${apiKey}&units=metric`;
-
         try {
-            const response = await axios.get(url);
-            setSearchResults(response.data.list || []);
-        } catch (error) {
-            setError('Failed to fetch search results');
+            const results = await WeatherAPI.searchCity(query);
+            setSearchResults(results);
+        } catch (error: any) {
+            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -46,21 +44,40 @@ function SearchAndCityList() {
         }
     }, [searchTerm]);
 
-    const handleSearchChange = (value: string) => setSearchTerm(value);
-    const handleSearchSubmit = (event: React.FormEvent) => event.preventDefault();
-
     return (
         <main className="flex flex-col bg-[#e9ecef] shadow-lg absolute right-0 bottom-10 top-28 p-5 text-black rounded-tl-2xl rounded-bl-2xl gap-8">
-            <SearchForm
-                searchTerm={searchTerm}
-                onSearchChange={handleSearchChange}
-                onSearchSubmit={handleSearchSubmit}
-            />
-            <CityList
-                searchResults={searchResults}
-                loading={loading}
-                error={error}
-            />
+            <form onSubmit={(e) => e.preventDefault()} className="flex gap-3">
+                <input
+                    placeholder="Search city..."
+                    className="bg-[#f8f9fa] rounded-2xl w-[300px] h-[35px] p-6 shadow-[inset_2px_2px_6px_rgba(0,0,0,0.2)]"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button type="submit" className="bg-[#212529] text-white rounded-2xl px-4 py-2 hover:bg-[#495057] transition">
+                    Search
+                </button>
+            </form>
+
+            {loading && <div>Loading...</div>}
+            {error && <div className="text-red-500">{error}</div>}
+
+            {!loading && !error && searchResults.length === 0 && searchTerm.trim() && (
+                <div className="text-gray-500">No data found for your search.</div>
+            )}
+
+            <div className="flex flex-col gap-3">
+                {searchResults.map((result) => (
+                    <div
+                        key={result.id}
+                        className="bg-white p-4 rounded-lg shadow-md cursor-pointer"
+                        onClick={() => dispatch(setWeatherData(result))}
+                    >
+                        <h3 className="text-lg font-semibold">{result.name}</h3>
+                        <p className="text-sm">Country: {result.sys.country}</p>
+                        <p className="text-sm">Temperature: {result.main.temp}°C</p>
+                    </div>
+                ))}
+            </div>
         </main>
     );
 }
