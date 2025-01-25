@@ -5,18 +5,20 @@ import WeatherForecast from './WeatherForecast';
 
 interface WeatherProps {
     weatherData: {
-        name: string;
-        main: {
-            temp: number;
-            feels_like: number;
-            temp_max: number;
-            temp_min: number;
-        };
-        weather: {
-            icon: string;
-        }[];
+      name: string;
+      sys: { country: string };
+      main: {
+        temp: number;
+        feels_like: number;
+        temp_max: number;
+        temp_min: number;
+      };
+      weather: Array<{
+        icon: string;
+        description: string;
+      }>;
     } | null;
-}
+  }
 
 function Weather({ weatherData }: WeatherProps) {
     return (
@@ -33,7 +35,7 @@ function Weather({ weatherData }: WeatherProps) {
             <main>
 
                 {/* Weather Forecast Information */}
-                <WeatherForecast />
+                {/* <WeatherForecast /> */}
 
             </main>
         </main>

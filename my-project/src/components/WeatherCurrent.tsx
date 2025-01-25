@@ -37,7 +37,7 @@ function WeatherCurrent() {
             </div>
             <aside className="flex flex-col items-center gap-4">
                 <img
-                    src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`}
+                    src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png`}
                     alt="weather icon"
                     className="w-[120px] h-[120px]"
                 />

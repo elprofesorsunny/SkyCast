@@ -58,7 +58,7 @@ const SearchAndCityList: React.FC = () => {
     }, [searchTerm]);
 
     return (
-        <main className="flex flex-col bg-[#e9ecef] shadow-lg absolute right-0 bottom-10 top-28 p-5 text-black rounded-tl-2xl rounded-bl-2xl gap-8">
+        <main className="flex flex-col bg-[#e9ecef] shadow-lg absolute right-0 bottom-10 top-28 p-5 text-black rounded-tl-2xl rounded-bl-2xl gap-6">
             <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             {loading && <div>Loading...</div>}
             {error && <div className="text-red-500">{error}</div>}
