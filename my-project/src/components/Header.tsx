@@ -1,17 +1,3 @@
-/**
- * @file Header.tsx
- * @description This component renders the header of the website, including a sticky navigation menu 
- *              with icons for different sections like Home, News, and Cities. The header is styled 
- *              using Tailwind CSS for a modern design.
- * 
- * @component
- * @returns {TSX.Element} A sticky header with navigation links and icons.
- * 
- * @author elprofesorsunny
- * @version 1.0.0
- * @date 2025-01-04
- */
-
 function Header() {
   return (
     // Header Section
@@ -41,11 +27,12 @@ function Header() {
                 </li>
             </ul>
         </nav>
-        <section className="absolute flex m-6 font-semibold text-xl right-5 gap-5">
-            <button className="py-3 px-4 bg-[#e9ecef] rounded-xl shadow-lg">
+        <section className="absolute flex bg-[#e9ecef] m-6 font-semibold text-xl right-5 rounded-xl shadow-xl justify-center items-center">
+            <button className="py-3 px-4 rounded-l-xl transition duration-300 hover:text-[#B60046]">
                 Login
             </button>
-            <button className="py-3 px-4 bg-[#e9ecef] rounded-xl shadow-lg">
+            <span>|</span>
+            <button className="py-3 px-4 rounded-r-xl transition duration-300  hover:text-[#B60046]">
                 Sign Up
             </button>
         </section>
