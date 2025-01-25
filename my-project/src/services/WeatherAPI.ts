@@ -1,5 +1,5 @@
 import { weatherAxios, geoAxios } from './weather.interceptor';
-import ErrorHandler from './ErrorHandler';
+import { ErrorHandler } from '../services/ErrorHandler';
 
 interface GeoResponse {
   lat: number;

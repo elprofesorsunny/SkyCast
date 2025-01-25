@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance }  from 'axios';
 import { WeatherConfig } from './weather.config';
 
 export const weatherAxios = axios.create({
@@ -9,7 +9,7 @@ export const geoAxios = axios.create({
   baseURL: WeatherConfig.geoURL,
 });
 
-const applyCommonInterceptors = (instance: axios.AxiosInstance) => {
+const applyCommonInterceptors = (instance: AxiosInstance) => {
 
   instance.interceptors.request.use((config) => {
     config.params = {
