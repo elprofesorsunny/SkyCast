@@ -1,28 +1,49 @@
-import axios from 'axios';
+import { weatherAxios, geoAxios } from './weather.interceptor';
 import ErrorHandler from './ErrorHandler';
 
-const apiKey = 'ef827831237dbae7257b7b7499242373';
-const baseUrl = 'https://api.openweathermap.org/data/2.5';
+interface GeoResponse {
+  lat: number;
+  lon: number;
+  country: string;
+  name: string;
+}
+
+interface WeatherResponse {
+  id: number;
+  name: string;
+  sys: { country: string };
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_max: number;
+    temp_min: number;
+  };
+  weather: Array<{
+    icon: string;
+    description: string;
+  }>;
+}
 
 const WeatherAPI = {
-  searchCity: async (query: string): Promise<any[]> => {
+  async searchCity(query: string): Promise<WeatherResponse[]> {
     try {
+      const { data: geoData } = await geoAxios.get<GeoResponse[]>('/direct', {
+        params: { q: query }
+      });
 
-      const geoResponse = await axios.get(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${apiKey}`
-      );
-
-      const weatherPromises = geoResponse.data.map(async (city: any) => {
-        const weatherResponse = await axios.get(
-          `${baseUrl}/weather?lat=${city.lat}&lon=${city.lon}&units=metric&appid=${apiKey}`
-        );
+      const promises = geoData.map(async (city) => {
+        const { data } = await weatherAxios.get<WeatherResponse>('/weather', {
+          params: { lat: city.lat, lon: city.lon }
+        });
+        
         return {
-          ...weatherResponse.data,
+          ...data,
           sys: { country: city.country },
+          coord: { lat: city.lat, lon: city.lon },
         };
       });
 
-      return await Promise.all(weatherPromises);
+      return Promise.all(promises);
     } catch (error) {
       const errorMessage = ErrorHandler.handle(error);
       ErrorHandler.log(error);
