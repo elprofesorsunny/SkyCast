@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import WeatherAPI from "../services/WeatherAPI";
+import { WeatherService } from "../api/services/weather.service";
 import SearchForm from "./SearchForm";
 import SearchResults from "./SearchResults";
-import ErrorDisplay from "./ErrorDisplay";
-import { ErrorHandler } from "../services/ErrorHandler";
+import { ErrorHandler } from "../utils/errorHandler";
+import { HandledError } from "../api/types/error.type";
+import { ErrorDisplay } from "./ErrorDisplay";
 
 const SearchAndCityList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -30,11 +31,11 @@ const SearchAndCityList: React.FC = () => {
     setError(null);
 
     try {
-      const results = await WeatherAPI.searchCity(query);
+      const results = await WeatherService.searchCities(query);
       setSearchResults(results);
     } catch (err: unknown) {
-      const handledError = ErrorHandler.handle(err);
-      setError(handledError.message || "An error occurred while fetching data.");
+      const handledError = ErrorHandler(err);
+      setError((handledError as HandledError).message || "An error occurred while fetching data.");
     } finally {
       setLoading(false);
     }
@@ -67,7 +68,7 @@ const SearchAndCityList: React.FC = () => {
     <main className="flex flex-col bg-[#e9ecef] shadow-lg absolute right-0 bottom-10 top-28 p-5 text-black rounded-tl-2xl rounded-bl-2xl gap-6">
       <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {loading && <div>Loading...</div>}
-      {error && <ErrorDisplay error={error} />}
+      {error && <ErrorDisplay errorMessage={error} />}
       {!loading && !error && searchResults.length === 0 && searchTerm.trim() && (
         <div className="text-gray-500">No data found for your search.</div>
       )}

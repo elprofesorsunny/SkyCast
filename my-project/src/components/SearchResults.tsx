@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Dispatch } from "redux";
 import { setWeatherData } from "../redux/WeatherSlice";
-import ErrorDisplay from "./ErrorDisplay";
-import { ErrorHandler } from "../services/ErrorHandler";
-import { CustomError } from "../services/CustomError";
+import { ErrorDisplay } from "./ErrorDisplay";
 
 interface SearchResultsProps {
   searchResults: Array<{
@@ -17,7 +15,7 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, dispatch }) => {
-  const [error, setError] = useState<CustomError | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleItemClick = async (result: typeof searchResults[number]) => {
     try {
@@ -30,21 +28,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, dispatch }
       }
 
       dispatch(setWeatherData(result));
-      setError(null); // پاک کردن خطا
-    } catch (err: unknown) {
-      const handledError = ErrorHandler.handle(err);
-
-      // تبدیل خطا به شیء از نوع CustomError
-      const customError: CustomError = {
-        type: 'unknown', // یا 'network' یا 'server' بسته به نوع خطا
-        message: handledError.message || "An unexpected error occurred.",
-        details: {
-          status: 500, // این مقدار رو می‌تونی به دلخواه تنظیم کنی
-          timestamp: new Date().toISOString(),
-        }
-      };
-
-      setError(customError);
+      setError(null);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     }
   };
 
@@ -52,7 +42,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, dispatch }
     <div className="flex flex-col my-2 gap-4">
       {error && (
         <div className="mx-4">
-          <ErrorDisplay error={error} /> {/* ارسال خطا به ErrorDisplay */}
+          <ErrorDisplay errorMessage={error} />
         </div>
       )}
 
