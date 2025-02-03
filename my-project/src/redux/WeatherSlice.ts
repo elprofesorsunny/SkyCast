@@ -13,8 +13,9 @@ const weatherSlice = createSlice({
     initialState,
     reducers: {
         setWeatherData: (state, action: PayloadAction<any>) => {
+            console.log("Redux Updated:", action.payload);
             state.weatherData = action.payload;
-            localStorage.setItem("weatherData", JSON.stringify(action.payload));
+            // localStorage.setItem("weatherData", JSON.stringify(action.payload));
         },
     },
 });

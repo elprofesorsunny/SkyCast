@@ -1,20 +1,14 @@
 import { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import { API_CONFIG } from '../config/api.config';
 
-type InterceptorConfig = {
-  additionalParams?: Record<string, any>;
-};
+const BASE_URL = "https://api.openweathermap.org";
+export const API_KEY = "ef827831237dbae7257b7b7499242373";
 
-export const applyCommonInterceptors = (
-  instance: AxiosInstance,
-  config?: InterceptorConfig
-) => {
+export const applyCommonInterceptors = (instance: AxiosInstance) => {
   instance.interceptors.request.use((req: InternalAxiosRequestConfig) => {
+    req.baseURL = BASE_URL;
     req.params = {
       ...req.params,
-      appid: API_CONFIG.API_KEY,
-      units: API_CONFIG.DEFAULT_PARAMS.UNITS,
-      ...config?.additionalParams,
+      appid: API_KEY
     };
     return req;
   });

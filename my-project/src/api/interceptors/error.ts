@@ -3,7 +3,7 @@ import { ErrorHandler } from '../../utils/errorHandler';
 
 export const applyErrorInterceptor = (instance: AxiosInstance) => {
   instance.interceptors.response.use(
-    null,
+    undefined,
     (error: AxiosError) => {
       const errorMessage = ErrorHandler(error);
       ErrorHandler(error);
