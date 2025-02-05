@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ROUTES } from '../constants/Routes';
 
 function Header() {
   return (
@@ -7,21 +8,21 @@ function Header() {
         <ul className="flex gap-8 items-center">
           {/* Home Icon */}
           <li>
-            <Link to="/">
+            <Link to={ROUTES.HOME}>
               <img src="../assets/icons/home-icon.svg" className="w-[28px] h-[28px]" alt="Home" />
             </Link>
           </li>
 
           {/* About Icon */}
           <li>
-            <Link to="/about">
+            <Link to={ROUTES.ABOUT}>
               <img src="../assets/icons/news-icon.svg" className="w-[28px] h-[28px]" alt="About" />
             </Link>
           </li>
 
           {/* Cities Icon */}
           <li>
-            <Link to="/cities">
+            <Link to={ROUTES.CITIES}>
               <img src="../assets/icons/cities-icon.svg" className="w-[28px] h-[28px]" alt="Cities" />
             </Link>
           </li>
