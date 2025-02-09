@@ -7,7 +7,7 @@ interface SearchFormProps {
     loading: boolean;
 }
 
-export const SearchForm: React.FC<SearchFormProps> = ({ searchTerm, setSearchTerm, loading }) => {
+const SearchForm: React.FC<SearchFormProps> = ({ searchTerm, setSearchTerm, loading }) => {
     return (
         <form onSubmit={(e) => e.preventDefault()} className="relative flex gap-3 items-center">
             <input
@@ -22,3 +22,5 @@ export const SearchForm: React.FC<SearchFormProps> = ({ searchTerm, setSearchTer
         </form>
     );
 };
+
+export default SearchForm;

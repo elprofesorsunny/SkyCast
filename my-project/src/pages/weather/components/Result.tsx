@@ -1,50 +1,52 @@
-import { GeoData, WeatherData } from "../../../api/types/weather.type.ts";
+import { GeoData, WeatherData } from "@api/types/weather.type";
 import React, { useEffect, useState } from "react";
-import { getCurrentWeather } from "../../../api/APIFunction.ts";
-import { handleError } from "../../../utils/errorHandler.ts";
-import { setWeatherData } from "../../../redux/WeatherSlice.ts";
+import { getCurrentWeather } from "@api/APIFunction";
+import { handleError } from "@utils/errorHandler";
+import { setWeatherData } from "@redux/WeatherSlice";
+import { trackPromise } from "react-promise-tracker";
 
 interface SearchResultsProps {
   searchResults: GeoData[];
   dispatch: any;
 }
 
-export const SearchResults: React.FC<SearchResultsProps> = ({
+const SearchResults: React.FC<SearchResultsProps> = ({
   searchResults,
   dispatch,
 }) => {
   const [weatherDataList, setWeatherDataList] = useState<WeatherData[]>([]);
-  const [, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
-      setLoading(true);
-
       try {
-        searchResults.map(async (result) => {
-          try {
-            const weatherResponse = await getCurrentWeather(result.name);
-            const weatherData = weatherResponse.data as WeatherData;
-            const resultObj = {
-              id: weatherData.id,
-              name: result.name,
-              sys: { country: result.country },
-              main: weatherData.main || {
-                temp: undefined,
-                temp_min: undefined,
-                temp_max: undefined,
-              },
-              weather: weatherData.weather ? [weatherData.weather[0]] : [],
-            };
-            setWeatherDataList(resultObj.filter((data) => data !== undefined));
-          } catch (err) {
-            handleError(err); // Use error handler
-          }
-        });
+        const weatherDataList = await trackPromise(
+          Promise.all(
+            searchResults.map(async (result) => {
+              try {
+                const weatherResponse = await getCurrentWeather(result.name);
+                const weatherData = weatherResponse.data as WeatherData;
+                return {
+                  id: weatherData.id,
+                  name: result.name,
+                  sys: { country: result.country },
+                  main: weatherData.main || {
+                    temp: undefined,
+                    temp_min: undefined,
+                    temp_max: undefined,
+                  },
+                  weather: weatherData.weather ? [weatherData.weather[0]] : [],
+                };
+              } catch (err) {
+                handleError(err);
+                return undefined; // Use error handler
+              }
+            })
+          )
+        );
+
+        setWeatherDataList(weatherDataList.filter((data) => data !== undefined));
       } catch (error) {
         handleError(error); // Use error handler
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -53,9 +55,13 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 
   const handleItemClick = async (city: string) => {
     try {
-      const response = await getCurrentWeather(city);
-      const weatherData = response.data as WeatherData;
-      dispatch(setWeatherData(weatherData));
+      await trackPromise(
+        (async () => {
+          const response = await getCurrentWeather(city);
+          const weatherData = response.data as WeatherData;
+          dispatch(setWeatherData(weatherData));
+        })()
+      );
     } catch (err) {
       handleError(err); // Use error handler
     }
@@ -90,3 +96,5 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
     </div>
   );
 };
+
+export default SearchResults;

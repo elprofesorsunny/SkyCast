@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
 
 const About: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+  const { promiseInProgress } = usePromiseTracker();
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    trackPromise(
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true);
+        }, 2000);
+      })
+    );
   }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-10 bg-[#f8f9fa]">
-      {loading ? (
+      {promiseInProgress ? (
         <>
           <Skeleton height={40} width={300} className="mb-4" />
           <Skeleton count={3} width={600} className="mb-8" />

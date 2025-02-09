@@ -1,49 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setWeatherData } from "../../../redux/WeatherSlice";
-import { getCurrentWeather } from "../../../api/APIFunction";
-import { WeatherData } from "../../../api/types/weather.type";
-import { RootState } from "../../../redux/Store";
+import { setWeatherData } from "@redux/WeatherSlice";
+import { getCurrentWeather } from "@api/APIFunction";
+import { WeatherData } from "@api/types/weather.type";
+import { RootState } from "@redux/Store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import CurrentWeather from "./Current";
-import { WeatherDetail } from "./Detail";
-import { handleError } from "../../../utils/errorHandler";
+import CurrentWeather from "@components/Current";
+import { WeatherDetail } from "@components/Detail";
+import { handleError } from "@utils/errorHandler";
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 
 const CurrentAndDetail: React.FC = () => {
   const dispatch = useDispatch();
   const currentWeather = useSelector(
     (state: RootState) => state.weather.weatherData
   );
-  const [loading, setLoading] = useState<boolean>(true);
+  const { promiseInProgress } = usePromiseTracker();
 
   useEffect(() => {
     if (!currentWeather || !currentWeather.name) {
       const fetchWeather = async () => {
         try {
-          setLoading(true);
           const city = "London";
-          const response = await getCurrentWeather(city);
+          const response = await trackPromise(getCurrentWeather(city));
           const weatherData = response.data as WeatherData;
           dispatch(setWeatherData(weatherData));
         } catch (err) {
           handleError(err);
-        } finally {
-          setTimeout(() => {
-            setLoading(false);
-          }, 2000);
         }
       };
 
       fetchWeather();
-    } else {
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
     }
   }, [dispatch, currentWeather]);
 
-  if (loading) {
+  if (promiseInProgress) {
     return (
       <section className="flex flex-row justify-between items-center gap-5">
         <div className="flex flex-col gap-2 justify-start">
@@ -70,4 +62,4 @@ const CurrentAndDetail: React.FC = () => {
   );
 };
 
-export default CurrentAndDetail;
+export default React.memo(CurrentAndDetail);
