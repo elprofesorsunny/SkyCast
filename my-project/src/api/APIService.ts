@@ -4,7 +4,7 @@ import { applyLoggingInterceptor } from './interceptors/logging';
 import { applyErrorInterceptor } from './interceptors/error';
 
 const apiClient = axios.create({
-//   timeout: 10000,
+  // timeout: 1,
 });
 
 applyCommonInterceptors(apiClient);
