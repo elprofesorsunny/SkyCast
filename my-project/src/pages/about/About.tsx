@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker';
+import SkeletonPage from './components/Skeleton';
 
 const About: React.FC = () => {
   const { promiseInProgress } = usePromiseTracker();
@@ -19,11 +20,7 @@ const About: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen p-10 bg-[#f8f9fa]">
       {promiseInProgress ? (
-        <>
-          <Skeleton height={40} width={300} className="mb-4" />
-          <Skeleton count={3} width={600} className="mb-8" />
-          <Skeleton count={2} width={600} />
-        </>
+        <SkeletonPage />
       ) : (
         <>
           <h1 className="text-4xl font-bold mb-4">About SkyCast</h1>
