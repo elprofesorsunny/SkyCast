@@ -1,11 +1,6 @@
 import React from 'react';
 import { FaSpinner } from 'react-icons/fa';
-
-interface SearchFormProps {
-    searchTerm: string;
-    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
-    loading: boolean;
-}
+import { SearchFormProps } from '@types/search';
 
 const SearchForm: React.FC<SearchFormProps> = ({ searchTerm, setSearchTerm, loading }) => {
     return (

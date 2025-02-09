@@ -1,10 +1,4 @@
-interface WeatherCardProps {
-    title: string;
-    icon: string;
-    temperature: number;
-    high: number;
-    low: number;
-}
+import { WeatherCardProps } from '@types/weatherCard.type';
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ title, icon, temperature, high, low }) => {
     

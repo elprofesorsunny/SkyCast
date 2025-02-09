@@ -4,11 +4,7 @@ import { getCurrentWeather } from "@api/APIFunction";
 import { handleError } from "@utils/errorHandler";
 import { setWeatherData } from "@redux/WeatherSlice";
 import { trackPromise } from "react-promise-tracker";
-
-interface SearchResultsProps {
-  searchResults: GeoData[];
-  dispatch: any;
-}
+import { ResultProps } from "@types/result.type";
 
 const SearchResults: React.FC<SearchResultsProps> = ({
   searchResults,

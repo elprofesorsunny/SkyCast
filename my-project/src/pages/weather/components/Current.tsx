@@ -1,8 +1,6 @@
 import React from 'react';
+import { CurrentWeatherProps } from "@types/currentWeather";
 
-interface CurrentWeatherProps {
-  currentWeather: any;
-}
 
 const CurrentWeather: React.FC<CurrentWeatherProps> = ({ currentWeather }) => {
   return (
