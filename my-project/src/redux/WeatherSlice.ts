@@ -3,11 +3,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface WeatherState {
     weatherData: any | null;
     defaultCity: string;
+    searchTerm: string;
+    searchResults: any[];
 }
 
 const initialState: WeatherState = {
     weatherData: JSON.parse(localStorage.getItem("weatherData") || "null"),
     defaultCity: "London", // Default City
+    searchTerm: "",
+    searchResults: [],
 };
 
 const weatherSlice = createSlice({
@@ -22,9 +26,15 @@ const weatherSlice = createSlice({
         setDefaultCity: (state, action: PayloadAction<string>) => {
             state.defaultCity = action.payload;
         },
+        setSearchTerm: (state, action: PayloadAction<string>) => {
+            state.searchTerm = action.payload;
+        },
+        setSearchResults: (state, action: PayloadAction<any[]>) => {
+            state.searchResults = action.payload;
+        },
     },
 });
 
-export const { setWeatherData, setDefaultCity } = weatherSlice.actions;
+export const { setWeatherData, setDefaultCity, setSearchTerm, setSearchResults } = weatherSlice.actions;
 
 export default weatherSlice.reducer;
