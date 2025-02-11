@@ -1,11 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-
-interface ErrorModalProps {
-  isOpen: boolean;
-  onRequestClose: () => void;
-  errorMessage: string;
-}
+import errorModalProps from '@types/errorModal.type';
 
 const ErrorModal: React.FC<ErrorModalProps> = ({ isOpen, onRequestClose, errorMessage }) => {
   const customStyles = {

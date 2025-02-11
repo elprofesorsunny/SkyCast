@@ -1,16 +1,17 @@
-import { GeoData, WeatherData } from "@api/types/weather.type";
+import { WeatherData } from "@api/types/weather.type";
 import React, { useEffect, useState } from "react";
 import { getCurrentWeather } from "@api/APIFunction";
-import { handleError } from "@utils/errorHandler";
 import { setWeatherData } from "@redux/WeatherSlice";
 import { trackPromise } from "react-promise-tracker";
-import { ResultProps } from "@types/result.type";
+import { SearchResultsProps } from "@types/result.type";
+import { useError } from "@hooks/useError"; // Import the custom hook
 
 const SearchResults: React.FC<SearchResultsProps> = ({
   searchResults,
   dispatch,
 }) => {
   const [weatherDataList, setWeatherDataList] = useState<WeatherData[]>([]);
+  const { handleError } = useError(); // Use the custom hook
 
   useEffect(() => {
     const fetchWeatherData = async () => {

@@ -1,4 +1,4 @@
-import { GeoData } from "@api/types/weather.type";
+import { GeoData } from "@types/geoData.type";
 
 export interface SearchResultsProps {
   searchResults: GeoData[];

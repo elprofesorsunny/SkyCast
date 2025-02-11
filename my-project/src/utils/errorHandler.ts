@@ -57,7 +57,7 @@ export function handleError(error: unknown): void {
     }
     isErrorDisplayed = true;
   }
-  // Reset the flag after a delay to allow new errors to be displayed
+
   setTimeout(() => {
     isErrorDisplayed = false;
   }, 5000);
